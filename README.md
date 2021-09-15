@@ -24,7 +24,7 @@ Skill Test
 1. resourcegroup - creating resourcegroup
 2. networking - creating azure virtual network and required subnets
 3. securitygroup - creating network security group, setting desired security rules and associating them to subnets
-4. compute - creating availability sets, network interfaces and virtual machines for web and app
+4. compute - creating availability sets, Loadbalancer, network interfaces and virtual machines for web and app
 5. database - creating database server and database
 
 All the stacks are placed in the modules folder and the variable are stored under **terraform.tfvars**

@@ -5,6 +5,14 @@ resource "azurerm_virtual_network" "azvnet" {
   address_space       = [var.vnetcidr]
 }
 
+resource "azurerm_subnet" "Bastion-subnet" {
+  name                 = "Bastion-subnet"
+  virtual_network_name = azurerm_virtual_network.azvnet.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = [var.Bastionsubnetcidr]
+}
+
+
 resource "azurerm_subnet" "web-subnet" {
   name                 = "web-subnet"
   virtual_network_name = azurerm_virtual_network.azvnet.name

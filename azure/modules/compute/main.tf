@@ -13,6 +13,71 @@ resource "azurerm_public_ip" "azlbpip" {
 
 }
 
+resource "azurerm_public_ip" "azpub" {
+  name                    = var.name-PIP
+  location                = var.location
+  resource_group_name     = var.name
+  allocation_method       = "Static"
+  idle_timeout_in_minutes = 30  
+}
+
+resource "azurerm_network_interface" "Bastion-net" {
+    name = "Bastion-network"
+    resource_group_name = var.resource_group
+    location = var.location
+
+    ip_configuration{
+        name = "Bastion"
+        subnet_id = var.Bastion_subnet_id
+        private_ip_address_allocation = "Dynamic"
+		public_ip_address_id          = "${azurerm_public_ip.azpub.id}"
+    }
+}
+
+
+resource "azurerm_virtual_machine" "Bastion" {
+  name                  = "Bastion"
+  location              = var.location
+  resource_group_name   = var.name
+  network_interface_ids = ["${var.Bastion-net}"]
+  vm_size               = "Standard_DS1_v2"
+
+
+storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+  storage_os_disk {
+    name              = "Bastion"
+    disk_size_gb  = "10"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    #managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = var.bastion_host_name
+    admin_username = var.bastion_username
+    admin_password = var.bastion_os_password
+  }
+  
+  connection {
+    type = "ssh"
+    password = var.bastion_os_password
+    user = var.bastion_username
+  }
+  os_profile_linux_config {
+    disable_password_authentication = "false"
+ 
+}
+  tags = {
+    roles = "bastion"
+  }
+}
+
+
+
 #Azure LB 
 
 resource "azurerm_lb" "azlb" {

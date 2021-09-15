@@ -1,7 +1,7 @@
 # KPMGTECH
 Skill Test
 # Terraform code to deploy three-tier architecture on azure
-
+**The workflow of How the Code works is Explained in KPMG_ARCH**
 
 1. One virtual network tied to Four subnets.
 2. Each subnet will have one virtual machine.
